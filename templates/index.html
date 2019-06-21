@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Wine History</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="static/css/style.css"> -->
+
+  <!-- plotly -->
+  <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+
+  <!-- Icons -->
+  <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="static/css/leaflet.extra-markers.min.css">
+
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+  <!-- noUISlider -->
+  <!-- <link href="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.min.css" rel="stylesheet">
+  <script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script> -->
+  
+  <!-- D3 slider -->
+  <script src="https://unpkg.com/d3-simple-slider"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 jumbotron text-center">
+        <!-- <div class="img"></div> -->
+        <h1>Wine History</h1>
+        <p>By Pygeons 2.0</p>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div id="slider-pips"></div>
+    </div> -->
+    <div class="row align-items-center">
+      <div class="col-lg-9" id="value-time"></div>
+      <div class="col-lg" id="slider-time"></div>
+    </div>
+    <!-- <div class="row"> -->
+      <!-- <h2>Test Routes</h2><br>
+      <h3>/production</h3><br>
+      <h3>/consumption</h3><br>
+      <h3>/population</h3><br> -->
+    <!-- </div>  -->
+    <!-- <div class="row">
+      <div id="map"></div>
+    </div> -->
+  </div>
+
+  <div id="map"></div>
+
+  <!-- heather div id -->
+  <div id="heatherDiv" class="parcoords" style="width:900px;height:575px">
+
+  <!-- D3 -->
+  <!-- <script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script> -->
+  <script src="https://d3js.org/d3.v5.min.js"></script> 
+
+  <!-- MomentJS -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+  integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+  crossorigin=""></script>
+
+  <!-- Icons -->
+  <script src="{{ url_for('static', filename='js/leaflet.extra-markers.min.js') }}"></script>
+
+  <!-- polyfill.io is library for using newer JavaScript features in older browers (such as Object.assign) -->
+  <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+
+  <!-- API Key -->
+  <script type="text/javascript"  src="{{ url_for('static', filename='js/config.js')}}"></script>
+
+  <!-- <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script> -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Our JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/logic_polygon.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/logic.js') }}"></script>
+  <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/logicHeather.js') }}"></script> -->
+
+  
+
+</body>
+
+</html>
