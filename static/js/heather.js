@@ -111,8 +111,8 @@ function myParallel() {
         values: countryNumber.slice(0,5000)
         },
         {
-        //constraintrange: [0,10],
-        range: [0, 1000],
+        constraintrange: [0,10],
+        range: [0, 100],
         label: 'Price',
         values: priceFilled.slice(0,5000),
         // multiselect:true
