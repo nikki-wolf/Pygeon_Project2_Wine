@@ -1,5 +1,11 @@
+// The primary objective of this JS file is to plot a mapbox map (coupled with leaflet)
+// The data comes from the API call from the database both in Heroku/local server.
+// the backend script is in Python Flask.
+// by Kevin Beygi, updated 07-22-2019
+
 const maxCircleRadius= 500000;
 const startSlider=1980;
+const maxBubbleRadius= 200; //Renato_code
 
 // Define arrays to hold created markers
 var productionVolumeMark ,consumptionVolumeMark, exportVolumeMark,importVolumeMark;
@@ -8,6 +14,8 @@ var countriesMarked=[];
   
 var productionVolumeLayer, consumptionVolumeLayer; 
 var overlayMaps, controlLayer;
+
+var layoutBubble;
 
 var polygonMark;
 
@@ -42,9 +50,70 @@ var myMap = L.map("map", {
       20,0
     ],
     zoom: 3,
+    maxZoom: 3,
+    minZoom: 3,
     //layers: [lightMap, wineHistory]
     layers: [outdoorMap]
 });
+
+//-------------------- KEVIN FOR MATT TO PRODUCE TREE OF COUNTRY VARIETY AND SUBVAIERTY --------------------------
+// Wine_types={'Bold Red': ['Malbec', 'Syrah','Red Blend','Shiraz', 'Mourvedre', 'Merlot','Bordeaux-style Red Blend', 'Pinotage', 'Petite Sirah', 'Touriga Nacional', 'Cabernet Sauvignon', 'Portuguese Red', 'Meritage'],
+//             'Medium Red': ['Meriot', 'Sangiovese', 'Rhône-style Red Blend','Zinfandel','Cabernet Franc', 'Tempranillo', 'Nebbiolo', 'Barbera', 'Cotes du Rhone Blend'],
+//             'Light Red':['Pinot Noir', 'Grenache', 'Gamay', 'St. Laurent', 'Carignan', 'Counoise'],
+//             'Rich White': ['Chardonnay', 'Semillon','Viognier', 'Marsanne', 'Roussanne'],
+//             'Light White': ['Bordeaux-style White Blend','Sauvignon Blanc', 'White Blend' , 'Albarino', 'Pitot Blanc', 'Vermentino', 'Melon de Bourgogne', 'Gargenega', 'Trebbiano', 'Pinot Gris', 'Pinot Grigio', 'Veltliner'],
+//             'Sweet White': ['Moscato', 'Riesling', 'Chenin Blanc', 'Gewurztraminer', 'Late Harvest Whites', 'Alascian Pinot Gris'],
+//             'Rosé': ['Rosé','Provencal Rose', 'White Zinfandel', 'Loire Valley Rose', 'Pinot Noir Rose', 'Syrah Rose', 'Garnache Rosado', 'Bandol Rose', 'Tempranilio Rose', 'Saignee Method Rose'],
+//             'Sparkling': ['Champagne', 'Prosecco', 'Cremant', 'Cava', 'Metodo Classico', 'Sparkling Wine', 'Sparkling Rose', 'Sparkling Blend', 'Champagne Blend'],
+//             'Dessert': ['Port', 'Sherry', 'Maderia', 'Vin Santo', 'Muscat', 'PX', 'Pedro Ximenez'],
+//             'Others': ['Others']
+//            }
+// //find winetypes per country:
+// var countriesRating=[]
+// var varieties=[]
+// var subvarieties=[];
+
+//  var url = "/api_rating";
+//  var wineRatingData=[]
+//   d3.json(url).then(function(wineData) {
+//     wineRatingData.push(wineData)
+//     console.log(wineData)
+//     wineData.forEach(function(d,i){
+//       countriesRating.push(d.Country)
+//       varieties.push(eval( '(' + d["Variety"].replace(/\bnan\b/g, "null") + ')' ).filter(onlyUnique))
+//       subvarieties.push(eval( '(' + d["Subvariety"].replace(/\bnan\b/g, "null") + ')' ).filter(onlyUnique))
+//     })
+//     // console.log(countriesRating)
+//     // console.log(varieties);
+//     // console.log(subvarieties);
+//     var subvar=[]
+//     var a;
+//     console.log(countriesRating.length)
+//     for (let i=0;i<countriesRating.length;i++){
+//       subvar[i]=[];
+//       //console.log(i,varieties[i])
+//       for (let j=0;j<varieties[i].length;j++){
+//         //console.log(i,j,varieties[i][j])
+//         subvar[i][j]=[];
+//         //if (Object.keys(Wine_types).includes(varieties[i][j])){
+          
+//           //console.log(i,j,Wine_types[varieties[i][j]])
+//           //console.log("i=",i,"obj=",Wine_types[varieties[i][j]])
+//             subvar[i][j].push(subvarieties[i][j])
+//         for (let k=0;k<subvarieties[i].length;k++){
+//           if ((Wine_types[varieties[i][j]]).includes(subvarieties[i][k])){
+//               subvar[i][j].push(subvarieties[i][j])
+//           } 
+//         }
+//         subvar[i][j]=subvar[i][j].filter(onlyUnique)        
+//       }
+//          // }
+//     }
+//     console.log(subvar)
+//   });
+
+// END OF MATT WORK
+//---------------------------------------------
 
 // let polygonsLink="{{ url_for('static', filename='countries.json')}}";
 // var xxx=d3.json(polygonsLink)
@@ -74,6 +143,8 @@ var years=[], countries=[], coordinates=[],
     exportVolumeRange, exportValueRange, exportVolumeGDPRange,
     importVolumeRange, importValueRange, importVolumeGDPRange,
     excessVolumeRange, populationRange;
+
+var prodpCapBubble,conspCapBubble, populationBubble, sizesbubbles, excessVolBubble;//renato
 
 //Reading Jsonified data from mLab database in our Flask App
 d3.json(wineHistApi).then(function(d){
@@ -110,7 +181,7 @@ d3.json(wineHistApi).then(function(d){
        // if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let prodyr=productionVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (prodyr){
-          d.setRadius(featureScale(productionVolumeRange)(prodyr))
+          d.setRadius(featureScale(productionVolumeRange, maxCircleRadius)(prodyr))
           .bindPopup(bindPopupTable(value,i))
         }
        // }
@@ -120,7 +191,7 @@ d3.json(wineHistApi).then(function(d){
         //  if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let consyr=consumptionVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (consyr){
-          d.setRadius(featureScale(consumptionVolumeRange)(consyr))
+          d.setRadius(featureScale(consumptionVolumeRange, maxCircleRadius)(consyr))
           //.bindPopup(`<h1>${countriesMarked[i]}, ${value}</h1> <hr> <h3>Consumption Volume (ML): ${(consumptionVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]/1E3).toFixed(0)}</h3>`)
           .bindPopup(bindPopupTable(value,i))
         }
@@ -132,7 +203,7 @@ d3.json(wineHistApi).then(function(d){
         //  if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let consyr=exportVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (consyr){
-          d.setRadius(featureScale(exportVolumeRange)(consyr))
+          d.setRadius(featureScale(exportVolumeRange, maxCircleRadius)(consyr))
           .bindPopup(bindPopupTable(value,i))
         }
         //  }
@@ -142,7 +213,7 @@ d3.json(wineHistApi).then(function(d){
         //  if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let consyr=importVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (consyr){
-          d.setRadius(featureScale(importVolumeRange)(consyr))
+          d.setRadius(featureScale(importVolumeRange, maxCircleRadius)(consyr))
           .bindPopup(bindPopupTable(value,i))
         }
         //  }
@@ -150,7 +221,12 @@ d3.json(wineHistApi).then(function(d){
       //polygonMark.forEach((d,i)=> d.setPopupContent("<h1>" +"HEREEEEEEEEE"+ countries[i] + "</h1> <hr> <h2>" + productionVolume[i][years.indexOf(value)] + "</h2>"));
             // productionVolumeMark.forEach(d => d.setRadius(parseInt(d3.timeFormat('%Y')(val)*500)))
       // consumptionVolumeMark.forEach(d => d.setRadius(parseInt(d3.timeFormat('%Y')(val)*500)))
-    })
+
+      //update renato bubble chart
+      console.log(layoutBubble)
+      updatePlotly(yearBubbleChart(value),layoutBubble)
+      
+   })
 
   //returns a table tag fitting in hte leaflet popup
   function bindPopupTable(value,i){
@@ -215,12 +291,6 @@ d3.json(wineHistApi).then(function(d){
   //       .setLatLng(popLocation)
   //       .setContent('<p>Hello world!<br />This is a nice popup.</p>')
   //       .openOn(mamyMap);        
-  // })
-
-  //action to change circle sizes based on chagning zoom level
-  // myMap.on('zoomend', function() {
-  //   console.log(this.getZoom())
-  //   allMarkerCircle(yearSlider, this.getZoom(), false)
   // })
 
 
@@ -328,8 +398,8 @@ d3.json(wineHistApi).then(function(d){
       let ind=countries.indexOf(countryCurrent)
       // Giving each feature a pop-up with information pertinent to it
       //layer.bindPopup("<h1>" + countryCurrent + "</h1> <hr> <h2>" + productionVolume[ind][145] + "</h2>");
-      layer.bindPopup(`<iframe frameborder="0" seamless="seamless" width=600px height=400px \
-                      scrolling="no" src="/plotlyChart?country=${countryCurrent}"></iframe></div>`, {maxWidth: 600})
+      layer.bindPopup(`<iframe frameborder="0" seamless="seamless" width=550px height=400px \
+                      scrolling="no" src="/plotlyChart?country=${countryCurrent}"></iframe></div>`, {maxWidth: 550})
     }
   }).addTo(myMap);
 
@@ -371,7 +441,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.25,
               color: "blue",
               fillColor: "blue",
-              radius: featureScale(productionVolumeRange)(productionVolume[i][yr])
+              radius: featureScale(productionVolumeRange, maxCircleRadius)(productionVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -383,7 +453,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.5,
               color: "orange",
               fillColor: "orange",
-              radius:featureScale(consumptionVolumeRange)(consumptionVolume[i][yr])
+              radius:featureScale(consumptionVolumeRange, maxCircleRadius)(consumptionVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -395,7 +465,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.5,
               color: "green",
               fillColor: "green",
-              radius:featureScale(exportVolumeRange)(exportVolume[i][yr])
+              radius:featureScale(exportVolumeRange, maxCircleRadius)(exportVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -407,7 +477,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.5,
               color: "red",
               fillColor: "red",
-              radius:featureScale(importVolumeRange)(importVolume[i][yr])
+              radius:featureScale(importVolumeRange, maxCircleRadius)(importVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -438,6 +508,87 @@ d3.json(wineHistApi).then(function(d){
     
   } //end of marker function
   allMarkerCircle(startSlider,myMap.getZoom(), true) //default yr 2010
+
+  // Begin Renato_code
+  // ===============================================
+  //   === B u b b l e   C h a r t   C o d e   ===
+  // ===============================================
+  
+  // Filter out "World" and "Other *" from the lists prior to plotting
+  // The array countriesMarked has the list of countries needed
+
+  // Loop through countries and create x, y and population arrays
+ 
+  function yearBubbleChart(yearSlider){
+    //countriesBubble = []; //countriesMarked
+    let secDimProdCapBub = secondDim(productionCapita, years.indexOf(yearSlider));
+    let secDimConsCapBub = secondDim(consumptionCapita, years.indexOf(yearSlider));
+    let secDimPop = secondDim(population,years.indexOf(yearSlider));
+    let secDimExcess = secondDim(excessVolume,years.indexOf(yearSlider));//kevin
+
+    prodpCapBubble = [];
+    conspCapBubble = [];
+    populationBubble = [];
+    excessVolBubble=[];//kevin
+    for (let i = 0; i < countries.length; i++) {
+      if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i]) &&
+         population[i][years.indexOf(yearSlider)] !== null){
+          prodpCapBubble.push(secDimProdCapBub[i])
+          conspCapBubble.push(secDimConsCapBub[i])
+          populationBubble.push(secDimPop[i])
+          excessVolBubble.push(secDimExcess[i])// kevin
+      }
+    };
+    sizesbubbles = [];
+    // populationBubble.forEach(function(d,i){
+    //   sizesbubbles.push(featureScale(populationRange, maxBubbleRadius)(d))
+    // })
+    excessVolBubble.forEach(function(d,i){ //Kevin
+    sizesbubbles.push(featureScale(excessVolumeRange, maxBubbleRadius)(d))
+    })//kevin
+    var traceBubble = {
+      x: prodpCapBubble,
+      y: conspCapBubble,
+      text: countriesMarked,
+      mode: 'markers',
+      marker: {
+      //size: sizesbubbles.map(d=>d*5)
+      size:  sizesbubbles
+      //  size: population[years.indexOf(2010)] This produces points of the same size
+      }
+    };
+    return [traceBubble]
+  }
+  
+  layoutBubble = {
+    title: {
+      text:'Relationship Between Production and Consumption per Capita',
+      font: {
+        family: 'Arial',
+        size: 36
+      }},
+    showlegend: false,
+    height: 600,
+    width: 800,
+    xaxis: {
+      title: 'Production per Capita (Liters)',
+      font: {
+        family: 'Arial',
+        size: 24
+      },
+      range:[0,200]},
+    yaxis: {
+      title: 'Consumption per Capita (Liters)',
+      font: {
+        family: 'Arial',
+        size: 24
+      },
+      range:[0,200]},
+  };
+  
+  Plotly.newPlot('renatoDiv', yearBubbleChart(startSlider), layoutBubble,{responsive: true});
+ 
+//END Renato_code (more below for short functions)
 
 }); //END OF READING FROM API-JSON  (DO NOT GO BEYOND EXCEPT FOR FUNCTIONS and TESTS)
 
@@ -480,10 +631,8 @@ d3.json(wineHistApi).then(function(d){
     console.log(excessVolumeRange)
     console.log(populationRange)
 
-    console.log(featureScale(populationRange)(populationRange[1]))
+    console.log(featureScale(populationRange,maxCircleRadius)(populationRange[1]))
   } 
-
-//find the mimum and maximum values of each property and use a scale linear to fitx the range of circle radius
 
 //find the minimum & maximum of each feature through all years of study (1865-2016) among all countries excluding World
 function featureRange(xFeature){
@@ -497,19 +646,45 @@ function featureRange(xFeature){
 }
 
 //linearly scaling all feature ranges so that circle radius always fits in [0,maxCircleRadius] for all properties
-function featureScale(featureRange) {
+function featureScale(featureRange,maxSize) {
   let x = d3.scaleLinear()
     .domain(featureRange)
-    .range([0, maxCircleRadius]);
+    .range([0, maxSize]);
 
   return x;
 }
 
 //logarithmic scaling all feature ranges so that circle radius always fits in [0,maxCircleRadius] for all properties
-function featureLogScale(featureRange) {
+function featureLogScale(featureRange, maxsize) {
   let x = d3.scaleLog()
     .domain([featureRange[0]+0.0001,featureRange[1]])
-    .range([1, maxCircleRadius]);
+    .range([1, maxsize]);
 
   return x;
 }
+//find unique vaues in an array
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+// Renato_code : 3 functions
+function secondDim(a, dim){
+  var b= [];
+  for(var i=0; i<a.length; i++){
+     b.push(a[i][dim]);
+  }
+  return b;
+}
+
+//function to update data in bubble chart-renato
+function updatePlotly(newdata,bubblelayout) {
+  Plotly.newPlot(document.getElementById("renatoDiv"), newdata,bubblelayout);
+}
+
+
+//help button to fully describe the map
+$("#helpText").mouseover(function() {
+  $(this).children("#helpDesc").show();
+}).mouseout(function() {
+  $(this).children("#helpDesc").hide();
+});

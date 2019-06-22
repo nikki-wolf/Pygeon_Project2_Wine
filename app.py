@@ -36,7 +36,6 @@ from datetime import datetime
 import ast
 import simplejson
 
-
 import pymongo
 
 mlab_ID={
@@ -76,13 +75,6 @@ FlaskJSON(app) #initiate FLASK-JSON
 @app.route("/")
 def home():
     return render_template("index.html")
-
-# @app.route("/plotlyTest")
-# def plotlyTest():
-#     Plotly.plot("myDiv", data, layout);
-
-#     })
-# }
 
 #generate data in json format to be called by indexPlotly.html  
 @app.route("/plotlyData")
@@ -132,12 +124,13 @@ def plotlyData():
 
     chartData=[trace1, trace2, trace3, trace4]  
 
-    chartLayout={"title": country}
+    chartLayout={"title": country, "showlegend": False}
 
     data={"data":chartData, 
           "layout": chartLayout}
     #return jsonify(data)
     return simplejson.dumps(data, ignore_nan=True)
+    
 
 #plots charts for each country using Plotly and load it to /plotly/?country=countryname (it will be called in leaflet map popup in logic.js)
 @app.route("/plotlyChart")
