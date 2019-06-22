@@ -562,7 +562,7 @@ d3.json(wineHistApi).then(function(d){
   
   layoutBubble = {
     title: {
-      text:'Relationship Between Production and Consumption per Capita',
+      // text:'Relationship Between Production and Consumption per Capita',
       font: {
         family: 'Arial',
         size: 36
