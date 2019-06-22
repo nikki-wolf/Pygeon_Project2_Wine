@@ -40,9 +40,10 @@ body {
 }
 
 #map {
-  height: 100%;
+  height: 80%;
   padding: 0;
   margin: 0;
+
 }
 
 /* css to customize Leaflet default styles  */
@@ -53,7 +54,7 @@ body {
     /* height: 270px;
     width: 450px */
     height: 100%;
-    width:450px
+    width:  500px;
 }
 
 .leaflet-popup-content {
