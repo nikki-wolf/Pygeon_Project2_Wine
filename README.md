@@ -2,7 +2,7 @@ Data_Visualization_Project
 Project2
 Output: The wine data is transfered to Heroku as a dashboard delivering a visual story of worldwide wine history (production, consumption, export, import in a value, volume, and per capita format), together with price, and rating per country.
 
-Input: Collections in mLab db (connected to Heroku). These data collections are generated, in turn, using two mega Excel workbooks which in turn generated in another project (Pygeon 1).
+Input: Collections in mLab db (connected to Heroku). These data collections are generated, in turn, using two mega Excel workbooks which generated in another project (Pygeon 1).
 
 wine_hist_onedoc : wine history by applying a JSON file including history for all countries and years (collection documents size: 1).
 wine_history: wine history by applying features per country per year (collection document size: 53 country * 152 years).
