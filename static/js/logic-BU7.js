@@ -7,14 +7,6 @@ const maxCircleRadius= 500000;
 const startSlider=1980;
 const maxBubbleRadius= 200; //Renato_code
 
-
-
-
-
-//my code commented out to work on hirachery tree
-
-
-
 // Define arrays to hold created markers
 var productionVolumeMark ,consumptionVolumeMark, exportVolumeMark,importVolumeMark;
 
@@ -64,7 +56,63 @@ var myMap = L.map("map", {
     layers: [outdoorMap]
 });
 
+//-------------------- KEVIN FOR MATT TO PRODUCE TREE OF COUNTRY VARIETY AND SUBVAIERTY --------------------------
+// Wine_types={'Bold Red': ['Malbec', 'Syrah','Red Blend','Shiraz', 'Mourvedre', 'Merlot','Bordeaux-style Red Blend', 'Pinotage', 'Petite Sirah', 'Touriga Nacional', 'Cabernet Sauvignon', 'Portuguese Red', 'Meritage'],
+//             'Medium Red': ['Meriot', 'Sangiovese', 'Rhône-style Red Blend','Zinfandel','Cabernet Franc', 'Tempranillo', 'Nebbiolo', 'Barbera', 'Cotes du Rhone Blend'],
+//             'Light Red':['Pinot Noir', 'Grenache', 'Gamay', 'St. Laurent', 'Carignan', 'Counoise'],
+//             'Rich White': ['Chardonnay', 'Semillon','Viognier', 'Marsanne', 'Roussanne'],
+//             'Light White': ['Bordeaux-style White Blend','Sauvignon Blanc', 'White Blend' , 'Albarino', 'Pitot Blanc', 'Vermentino', 'Melon de Bourgogne', 'Gargenega', 'Trebbiano', 'Pinot Gris', 'Pinot Grigio', 'Veltliner'],
+//             'Sweet White': ['Moscato', 'Riesling', 'Chenin Blanc', 'Gewurztraminer', 'Late Harvest Whites', 'Alascian Pinot Gris'],
+//             'Rosé': ['Rosé','Provencal Rose', 'White Zinfandel', 'Loire Valley Rose', 'Pinot Noir Rose', 'Syrah Rose', 'Garnache Rosado', 'Bandol Rose', 'Tempranilio Rose', 'Saignee Method Rose'],
+//             'Sparkling': ['Champagne', 'Prosecco', 'Cremant', 'Cava', 'Metodo Classico', 'Sparkling Wine', 'Sparkling Rose', 'Sparkling Blend', 'Champagne Blend'],
+//             'Dessert': ['Port', 'Sherry', 'Maderia', 'Vin Santo', 'Muscat', 'PX', 'Pedro Ximenez'],
+//             'Others': ['Others']
+//            }
+// //find winetypes per country:
+// var countriesRating=[]
+// var varieties=[]
+// var subvarieties=[];
 
+//  var url = "/api_rating";
+//  var wineRatingData=[]
+//   d3.json(url).then(function(wineData) {
+//     wineRatingData.push(wineData)
+//     console.log(wineData)
+//     wineData.forEach(function(d,i){
+//       countriesRating.push(d.Country)
+//       varieties.push(eval( '(' + d["Variety"].replace(/\bnan\b/g, "null") + ')' ).filter(onlyUnique))
+//       subvarieties.push(eval( '(' + d["Subvariety"].replace(/\bnan\b/g, "null") + ')' ).filter(onlyUnique))
+//     })
+//     // console.log(countriesRating)
+//     // console.log(varieties);
+//     // console.log(subvarieties);
+//     var subvar=[]
+//     var a;
+//     console.log(countriesRating.length)
+//     for (let i=0;i<countriesRating.length;i++){
+//       subvar[i]=[];
+//       //console.log(i,varieties[i])
+//       for (let j=0;j<varieties[i].length;j++){
+//         //console.log(i,j,varieties[i][j])
+//         subvar[i][j]=[];
+//         //if (Object.keys(Wine_types).includes(varieties[i][j])){
+          
+//           //console.log(i,j,Wine_types[varieties[i][j]])
+//           //console.log("i=",i,"obj=",Wine_types[varieties[i][j]])
+//             subvar[i][j].push(subvarieties[i][j])
+//         for (let k=0;k<subvarieties[i].length;k++){
+//           if ((Wine_types[varieties[i][j]]).includes(subvarieties[i][k])){
+//               subvar[i][j].push(subvarieties[i][j])
+//           } 
+//         }
+//         subvar[i][j]=subvar[i][j].filter(onlyUnique)        
+//       }
+//          // }
+//     }
+//     console.log(subvar)
+//   });
+
+// END OF MATT WORK
 //---------------------------------------------
 
 // let polygonsLink="{{ url_for('static', filename='countries.json')}}";
@@ -175,7 +223,7 @@ d3.json(wineHistApi).then(function(d){
       // consumptionVolumeMark.forEach(d => d.setRadius(parseInt(d3.timeFormat('%Y')(val)*500)))
 
       //update renato bubble chart
-      //console.log(layoutBubble)
+      console.log(layoutBubble)
       updatePlotly(yearBubbleChart(value),layoutBubble)
       
    })

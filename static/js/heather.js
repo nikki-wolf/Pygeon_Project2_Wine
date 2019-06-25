@@ -61,7 +61,7 @@ function myParallel() {
         }
         return d;
       });
-      console.log(varietyFilled, 'unpacked variety')
+      //console.log(varietyFilled, 'unpacked variety')
 
       // retrieve unique values of countries
       uniqueCountry = countryUnpack.filter((v, i, a) => a.indexOf(v) === i);
@@ -74,7 +74,8 @@ function myParallel() {
           }
         }
       }
-  
+      //console.log(uniqueCountry)
+
       // loop through each unique country, grab the ID and push it to an array. uniqueID was declared as global variable
       //uniqueCountry.forEach(function(value, index) {
       //  uniqueID.push(index);
@@ -102,29 +103,29 @@ function myParallel() {
         //   values: Array.apply(0,new Array(120915)).map(function(_,i){ return i+1 }), 
         // },
 
-        
         {
+        constraintrange: [0,1],
         range: [0,uniqueCountry.length],
         tickvals: uniqueID,
         ticktext: uniqueCountry,
         label: 'Countries',
-        values: countryNumber.slice(0,5000)
+        values: countryNumber.slice(0,1000)
         },
         {
         constraintrange: [0,10],
         range: [0, 100],
         label: 'Price',
-        values: priceFilled.slice(0,5000),
+        values: priceFilled.slice(0,1000),
         // multiselect:true
       
       }, 
       {
-        constraintrange: [86,90],
-        pad:[200,200,200],
+        constraintrange: [86,87],
+       // pad:[200,200,200],
         // multiselect: true,
         label: 'Rating',
         range: [80, Math.max(...ratingUnpack)],
-        values: ratingFilled.slice(0,5000),
+        values: ratingFilled.slice(0,1000),
       }
 
 

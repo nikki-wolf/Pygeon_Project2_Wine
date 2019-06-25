@@ -35,7 +35,6 @@ from collections import OrderedDict
 from datetime import datetime
 import ast
 import simplejson
-
 import pymongo
 
 mlab_ID={
@@ -65,6 +64,7 @@ wine_history_list=db.wine_history_list # reading wine history collection by opti
 wine_rating_list_World=db.wine_rating_list_World # reading wine rating and price collection for all the producing countries including US
 wine_rating_list_States=db.wine_rating_list_States # reading wine rating and price collection for The producing States
 wine_rating=db.wine_rating #reading wine rating and price from the long collection (120915 documents)
+wine_rating_world_unique=db.wine_rating_world_unique #reading wine rating and price from the one document collection with unique subvarieties
 
 func = lambda s: s[:1].lower() + s[1:] if s else '' #function to return lower case of all character of a strign
 
@@ -75,6 +75,14 @@ FlaskJSON(app) #initiate FLASK-JSON
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/api_rating_unique")
+def ratingunique():
+     wd=wine_rating_world_unique.find({}, {'_id': False})
+     rows=[]
+     for data in wd:
+        rows.append(data)
+     return simplejson.dumps(rows)
 
 #generate data in json format to be called by indexPlotly.html  
 @app.route("/plotlyData")
@@ -130,8 +138,32 @@ def plotlyData():
           "layout": chartLayout}
     #return jsonify(data)
     return simplejson.dumps(data, ignore_nan=True)
-    
 
+# return json data to test d3.tree   
+@app.route("/graphJSON")
+def plottreeD3():
+    
+    graph={
+        "name" : "Father",
+        "children": [
+            { "name" : "Son",
+            "children": [
+                {"name" : "Grandson"},
+                {"name" : "Granddaughter"}
+            ]
+            }
+        ]
+        }
+    return jsonify(graph)
+
+#post data from JS to flask
+@app.route('/JSONTree')
+def get_javascript_data():
+    with open(os.path.join('wineData.json')) as json_file:
+        json_data = json.load(json_file)
+    return json.dumps(json_data)
+
+    
 #plots charts for each country using Plotly and load it to /plotly/?country=countryname (it will be called in leaflet map popup in logic.js)
 @app.route("/plotlyChart")
 def plotlyChart():
