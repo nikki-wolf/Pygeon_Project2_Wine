@@ -139,30 +139,19 @@ def plotlyData():
     #return jsonify(data)
     return simplejson.dumps(data, ignore_nan=True)
 
-# return json data to test d3.tree   
-@app.route("/graphJSON")
-def plottreeD3():
-    
-    graph={
-        "name" : "Father",
-        "children": [
-            { "name" : "Son",
-            "children": [
-                {"name" : "Grandson"},
-                {"name" : "Granddaughter"}
-            ]
-            }
-        ]
-        }
-    return jsonify(graph)
-
-#post data from JS to flask
+#post data from JS to flask:wineData that is wine variety and subvariety(lumped all instances per country), avg(rating), and avg(price)
 @app.route('/JSONTree')
-def get_javascript_data():
+def get_javascript_wineData():
     with open(os.path.join('wineData.json')) as json_file:
         json_data = json.load(json_file)
     return json.dumps(json_data)
 
+#post data from JS to flask:wineData_allVarANDsubvarAgrr that is a lumped of all instances per country for avg(rating), and avg(price)
+@app.route('/JSONForceSimulation')
+def get_javascript_wineData_allVarANDsubvarAgrr():
+    with open(os.path.join('wineData_allVarANDsubvarAgrr.json')) as json_file:
+        json_data = json.load(json_file)
+    return json.dumps(json_data)
     
 #plots charts for each country using Plotly and load it to /plotly/?country=countryname (it will be called in leaflet map popup in logic.js)
 @app.route("/plotlyChart")

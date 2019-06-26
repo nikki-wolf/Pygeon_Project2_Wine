@@ -74,11 +74,11 @@ body {
 
 
 /* for D3 textarea */
-.node circle {
+/* .node circle {
   fill: #fff;
   stroke: steelblue;
   stroke-width: 3px;
-}
+} */
 
 .node text {
   font: 12px sans-serif;
@@ -88,4 +88,10 @@ body {
   fill: none;
   stroke: #ccc;
   stroke-width: 2px;
+}
+
+/* for D3 force simulation */
+.node circle {
+  stroke: #3a403d;
+  stroke-width: .5px;
 }
