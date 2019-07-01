@@ -1,16 +1,4 @@
-
 //-------------------- KEVIN FOR MATT TO PRODUCE TREE OF COUNTRY VARIETY AND SUBVAIERTY --------------------------
-// wineTypes={'Bold Red': ['Malbec', 'Syrah','Red Blend','Shiraz', 'Mourvedre', 'Merlot','Bordeaux-style Red Blend', 'Pinotage', 'Petite Sirah', 'Touriga Nacional', 'Cabernet Sauvignon', 'Portuguese Red', 'Meritage'],
-//             'Medium Red': ['Meriot', 'Sangiovese', 'Rhône-style Red Blend','Zinfandel','Cabernet Franc', 'Tempranillo', 'Nebbiolo', 'Barbera', 'Cotes du Rhone Blend'],
-//             'Light Red':['Pinot Noir', 'Grenache', 'Gamay', 'St. Laurent', 'Carignan', 'Counoise'],
-//             'Rich White': ['Chardonnay', 'Semillon','Viognier', 'Marsanne', 'Roussanne'],
-//             'Light White': ['Bordeaux-style White Blend','Sauvignon Blanc', 'White Blend' , 'Albarino', 'Pitot Blanc', 'Vermentino', 'Melon de Bourgogne', 'Gargenega', 'Trebbiano', 'Pinot Gris', 'Pinot Grigio', 'Veltliner'],
-//             'Sweet White': ['Moscato', 'Riesling', 'Chenin Blanc', 'Gewurztraminer', 'Late Harvest Whites', 'Alascian Pinot Gris'],
-//             'Rosé': ['Rosé','Provencal Rose', 'White Zinfandel', 'Loire Valley Rose', 'Pinot Noir Rose', 'Syrah Rose', 'Garnache Rosado', 'Bandol Rose', 'Tempranilio Rose', 'Saignee Method Rose'],
-//             'Sparkling': ['Champagne', 'Prosecco', 'Cremant', 'Cava', 'Metodo Classico', 'Sparkling Wine', 'Sparkling Rose', 'Sparkling Blend', 'Champagne Blend'],
-//             'Dessert': ['Port', 'Sherry', 'Maderia', 'Vin Santo', 'Muscat', 'PX', 'Pedro Ximenez'],
-//             //'Others': ['Others']
-//            }
 //find winetypes per country:
 var countriesRating=[];
 var varieties=[];
@@ -37,17 +25,17 @@ function onlyUnique(value, index, self) {
 d3.json(url).then(function(treeData) {
 
     // Set the dimensions and margins of the diagram
-    var margin = {top: 20, right: 90, bottom: 30, left: 90},
-        width = 1200 - margin.left - margin.right,
+    var margin = {top: 20, right: 0, bottom: 30, left: 45},
+        width = 800 - margin.left - margin.right,
         height = 1200 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#D3tree").append("svg")
         .attr("width", width + margin.right + margin.left)
         .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+        .append("g")
         .attr("transform", "translate("
             + margin.left + "," + margin.top + ")");
 

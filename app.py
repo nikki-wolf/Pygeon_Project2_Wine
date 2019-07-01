@@ -146,10 +146,17 @@ def get_javascript_wineData():
         json_data = json.load(json_file)
     return json.dumps(json_data)
 
-#post data from JS to flask:wineData_allVarANDsubvarAgrr that is a lumped of all instances per country for avg(rating), and avg(price)
+#post data from JS to flask:wineData_allVarANDsubvarAgrr that is a lumped of all instances of wine data per country for avg(rating), and avg(price)
 @app.route('/JSONForceSimulation')
 def get_javascript_wineData_allVarANDsubvarAgrr():
     with open(os.path.join('wineData_allVarANDsubvarAgrr.json')) as json_file:
+        json_data = json.load(json_file)
+    return json.dumps(json_data)
+
+#post data from JS to flask:wineParallel that is a lumped of all instances of wine data per country/variety/subvariety and for avg(rating), and avg(price)
+@app.route('/JSONParallel')
+def get_javascript_wineData_ParallelCoord():
+    with open(os.path.join('wineParallel.json')) as json_file:
         json_data = json.load(json_file)
     return json.dumps(json_data)
     

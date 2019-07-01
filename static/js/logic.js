@@ -1,19 +1,15 @@
 // The primary objective of this JS file is to plot a mapbox map (coupled with leaflet)
 // The data comes from the API call from the database both in Heroku/local server.
 // the backend script is in Python Flask.
-// by Kevin Beygi, updated 07-22-2019
+// by Kevin Beygi, updated 06-22-2019
+
+// Later, the Plotly plot was added to relate wine consumption and production per capita per country 
+// together with excess voulme in a bubble plot
+// by Renato Mello and Kevin Beygi, updated 06-23-2019
 
 const maxCircleRadius= 500000;
 const startSlider=1980;
 const maxBubbleRadius= 200; //Renato_code
-
-
-
-
-
-//my code commented out to work on hirachery tree
-
-
 
 // Define arrays to hold created markers
 var productionVolumeMark ,consumptionVolumeMark, exportVolumeMark,importVolumeMark;
@@ -64,16 +60,6 @@ var myMap = L.map("map", {
     layers: [outdoorMap]
 });
 
-
-//---------------------------------------------
-
-// let polygonsLink="{{ url_for('static', filename='countries.json')}}";
-// var xxx=d3.json(polygonsLink)
-// console.log(xxx)
-// d3.json(countries.geojson).then(function(d){
-//   console.log(d)
-// })
-
 //retreive wine history data
 let wineHistApi = '/api_history/GeoJSON'
 //let wineHistApi = '/api_history'
@@ -96,7 +82,7 @@ var years=[], countries=[], coordinates=[],
     importVolumeRange, importValueRange, importVolumeGDPRange,
     excessVolumeRange, populationRange;
 
-var prodpCapBubble,conspCapBubble, populationBubble, sizesbubbles, excessVolBubble;//renato
+var prodpCapBubble,conspCapBubble, populationBubble, sizeBubble, colorBubble, excessVolBubble;//renato
 
 //Reading Jsonified data from mLab database in our Flask App
 d3.json(wineHistApi).then(function(d){
@@ -175,7 +161,7 @@ d3.json(wineHistApi).then(function(d){
       // consumptionVolumeMark.forEach(d => d.setRadius(parseInt(d3.timeFormat('%Y')(val)*500)))
 
       //update renato bubble chart
-      //console.log(layoutBubble)
+      // console.log(layoutBubble)
       updatePlotly(yearBubbleChart(value),layoutBubble)
       
    })
@@ -491,12 +477,22 @@ d3.json(wineHistApi).then(function(d){
           excessVolBubble.push(secDimExcess[i])// kevin
       }
     };
-    sizesbubbles = [];
-    // populationBubble.forEach(function(d,i){
-    //   sizesbubbles.push(featureScale(populationRange, maxBubbleRadius)(d))
-    // })
+    // excess volume as bubble size //kevin
+    sizeBubble = [];//kevin
     excessVolBubble.forEach(function(d,i){ //Kevin
-    sizesbubbles.push(featureScale(excessVolumeRange, maxBubbleRadius)(d))
+      sizeBubble.push(featureScale(excessVolumeRange, maxBubbleRadius)(d))
+
+    })//kevin
+    // if we choose population as bubble color using colorBubble funcation generator, it is hard to distinguish among htem//kevin
+    // So, I picked a unique color for each country that does not change by time //kevin
+    colorBubble=[];//kevin
+
+    populationBubble.forEach(function(d,i){ //Kevin
+          // colorBubble.push(getColour("#b3cde0", '#011f4b', 
+          //                 featureLogScale(populationBubble, maxBubbleRadius)(Math.min(...populationBubble)),
+          //                 featureLogScale(populationBubble, maxBubbleRadius)(Math.max(...populationBubble)), 
+          //                 featureLogScale(populationBubble, maxBubbleRadius)(d)))
+          colorBubble.push("hsl( " + makeColor(i, excessVolBubble.length) + ", 100%, 50% )")
     })//kevin
     var traceBubble = {
       x: prodpCapBubble,
@@ -504,9 +500,8 @@ d3.json(wineHistApi).then(function(d){
       text: countriesMarked,
       mode: 'markers',
       marker: {
-      //size: sizesbubbles.map(d=>d*5)
-      size:  sizesbubbles
-      //  size: population[years.indexOf(2010)] This produces points of the same size
+            color: colorBubble,  //kevin
+            size:  sizeBubble   //kevin
       }
     };
     return [traceBubble]
@@ -528,14 +523,14 @@ d3.json(wineHistApi).then(function(d){
         family: 'Arial',
         size: 24
       },
-      range:[0,200]},
+      range:[0,productionCapitaRange[1]]},
     yaxis: {
       title: 'Consumption per Capita (Liters)',
       font: {
         family: 'Arial',
         size: 24
       },
-      range:[0,200]},
+      range:[0,consumptionCapitaRange[1]]},
   };
   
   Plotly.newPlot('renatoDiv', yearBubbleChart(startSlider), layoutBubble,{responsive: true});
@@ -640,3 +635,41 @@ $("#helpText").mouseover(function() {
 }).mouseout(function() {
   $(this).children("#helpDesc").hide();
 });
+
+// Generating a range of colors and a specific one wrt to value (startColor and endColor args in hex) (option 2)
+  //change color 
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+  function map(value, fromSource, toSource, fromTarget, toTarget) {
+    return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
+  }
+function getColour(startColour, endColour, min, max, value) {
+  var startRGB = hexToRgb(startColour);
+  var endRGB = hexToRgb(endColour);
+  var percentFade = map(value, min, max, 0, 1);
+
+  var diffRed = endRGB.r - startRGB.r;
+  var diffGreen = endRGB.g - startRGB.g;
+  var diffBlue = endRGB.b - startRGB.b;
+
+  diffRed = (diffRed * percentFade) + startRGB.r;
+  diffGreen = (diffGreen * percentFade) + startRGB.g;
+  diffBlue = (diffBlue * percentFade) + startRGB.b;
+
+  var result = "rgb(" + Math.round(diffRed) + ", " + Math.round(diffGreen) + ", " + Math.round(diffBlue) + ")";
+  return result;
+}
+
+//getcolor using distinc color mapping (option 3)
+
+function makeColor(colorNum, colors){
+  if (colors < 1) colors = 1; // defaults to one color - avoid divide by zero
+  return colorNum * (360 / colors) % 360;
+}
+
