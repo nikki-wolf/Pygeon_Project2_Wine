@@ -43,36 +43,65 @@
         <p>By Pygeons 2.0, v.1.0</p>
       </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-          <div id="helpText">
-            <img src="{{ url_for('static', filename='image/help-button-icon.png') }}" alt="Help" height="50" width="50">
-            <div id="helpDesc"> 
-              <p>Parallel coordinate plot visualizes the multivariate wine dataset. To show the interrelation between <b>wine rating</b>, <b> price</b>, <b> variety</b>, and <b>subvariety</b> on a country basis comporising a <b>5-dimensional space</b>, a polyline with vertices on the <b>country</b>, <b>wine rating</b> , <b>wine price</b>, and <b>wine variety</b>, and <b>wine suvariety</b>is plotted. <br> User can <b>drage the lines along the axes to filter or drag axis names acroos the plot to rearrange variables</b>. </p>
-              <img src="{{ url_for('static', filename='image/parallelCoordPlotCapture.PNG') }}" alt="Parallel Coord Plot Example" width="100%">
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <div id="helpText">
+          <img src="{{ url_for('static', filename='image/help-button-icon.png') }}" alt="Help" height="50" width="50">
+          <div id="helpDesc"> 
+            <p>Parallel coordinate plot visualizes the multivariate wine dataset. To show the interrelation between <b>wine rating</b>, <b> price</b>, <b> variety</b>, and <b>subvariety</b> on a country basis comporising a <b>5-dimensional space</b>, a polyline with vertices on the <b>country</b>, <b>wine rating</b> , <b>wine price</b>, and <b>wine variety</b>, and <b>wine suvariety</b>is plotted. <br> User can <b>drage the lines along the axes to filter or drag axis names acroos the plot to rearrange variables</b>. </p>
+            <img src="{{ url_for('static', filename='image/parallelCoordPlotCapture.PNG') }}" alt="Parallel Coord Plot Example" width="100%">
           </div>
         </div>
       </div>
-    </div>
-    <div class="row align-items-center">
+    </div> -->
+
+    <!-- <div class="row align-items-center">
         <div class="col-lg-9" id="value-time"></div>
         <div class="col-lg" id="slider-time"></div>
-    </div>
+    </div> -->
   </div>
 
   <div id="map"></div>
+
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-9" id="value-time"></div>
       <div class="col-lg" id="slider-time"></div>
     </div>
   </div>
-  <div id="D3tree"></div>
 
-  <div id="renatoDiv"></div>
+    <!-- buble chart -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12  col-md-12">
+                <div id="renatoDiv"></div>
+            </div>
+        </div>
+    </div>  
+
+  <!-- d3tree & forcesimultion -->
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12  col-md-12">
+          <div id="heatherDiv" class="parcoords" style="width:900px;height:575px"></div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12  col-md-5">
+        <div id="D3tree"></div>
+      </div>
+      <div class="col-xs-12  col-md-1">
+        </div>
+      <div class="col-xs-12  col-md-5">
+        <div id="forceSimulation"></div>
+      </div>
+    </div>
+  </div>
+
+
 
   <!-- heather div id -->
-  <div id="heatherDiv" class="parcoords" style="width:900px;height:575px">
+  <!-- <div id="heatherDiv" class="parcoords" style="width:900px;height:575px"></div> -->
 
   <!-- D3 -->
   <!-- <script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script> -->
@@ -103,11 +132,16 @@
   <!-- Our JavaScript -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/logic_polygon.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/logic.js') }}"></script>
+
+
   <script type="text/javascript" src="{{ url_for('static', filename='js/heather.js') }}"></script>
+
   <script type="text/javascript" src="{{ url_for('static', filename='js/d3tree.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/d3TreeCircleForce.js') }}"></script>
 
-  
+  <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/parallelD3.js') }}"></script> -->
+
+
 
 </body>
 

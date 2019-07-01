@@ -119,7 +119,7 @@ d3.json(wineHistApi).then(function(d){
        // if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let prodyr=productionVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (prodyr){
-          d.setRadius(featureScale(productionVolumeRange, maxCircleRadius)(prodyr))
+          d.setRadius(featureScaleLogic(productionVolumeRange, maxCircleRadius)(prodyr))
           .bindPopup(bindPopupTable(value,i))
         }
        // }
@@ -129,7 +129,7 @@ d3.json(wineHistApi).then(function(d){
         //  if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let consyr=consumptionVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (consyr){
-          d.setRadius(featureScale(consumptionVolumeRange, maxCircleRadius)(consyr))
+          d.setRadius(featureScaleLogic(consumptionVolumeRange, maxCircleRadius)(consyr))
           //.bindPopup(`<h1>${countriesMarked[i]}, ${value}</h1> <hr> <h3>Consumption Volume (ML): ${(consumptionVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]/1E3).toFixed(0)}</h3>`)
           .bindPopup(bindPopupTable(value,i))
         }
@@ -141,7 +141,7 @@ d3.json(wineHistApi).then(function(d){
         //  if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let consyr=exportVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (consyr){
-          d.setRadius(featureScale(exportVolumeRange, maxCircleRadius)(consyr))
+          d.setRadius(featureScaleLogic(exportVolumeRange, maxCircleRadius)(consyr))
           .bindPopup(bindPopupTable(value,i))
         }
         //  }
@@ -151,7 +151,7 @@ d3.json(wineHistApi).then(function(d){
         //  if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         let consyr=importVolume[countries.indexOf(countriesMarked[i])][years.indexOf(value)]
         if (consyr){
-          d.setRadius(featureScale(importVolumeRange, maxCircleRadius)(consyr))
+          d.setRadius(featureScaleLogic(importVolumeRange, maxCircleRadius)(consyr))
           .bindPopup(bindPopupTable(value,i))
         }
         //  }
@@ -368,9 +368,12 @@ d3.json(wineHistApi).then(function(d){
     importVolumeMark=[];
   
     for (let i = 0; i < countries.length; i++) {
+      
       if (!['World', 'Other WEM', 'Other ECA', 'Other LAC', 'Other AME'].includes(countries[i])){
         countriesMarked.push(countries[i])
         let yr= years.indexOf(yearSlider);
+        console.log("prodvolRange=",productionVolumeRange,"prodvol=",productionVolume[0][yr],"maxcirc=",maxCircleRadius,
+                    "feature=",featureScaleLogic(productionVolumeRange, maxCircleRadius)(productionVolume[0][yr]))
         // Marker circle for productionVolume, consumptionVolume, exportVolume, and importVolume
         //if (productionVolume[i][yr]){
           productionVolumeMark.push(
@@ -379,7 +382,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.25,
               color: "blue",
               fillColor: "blue",
-              radius: featureScale(productionVolumeRange, maxCircleRadius)(productionVolume[i][yr])
+              radius: featureScaleLogic(productionVolumeRange, maxCircleRadius)(productionVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -391,7 +394,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.5,
               color: "orange",
               fillColor: "orange",
-              radius:featureScale(consumptionVolumeRange, maxCircleRadius)(consumptionVolume[i][yr])
+              radius: featureScaleLogic(consumptionVolumeRange, maxCircleRadius)(consumptionVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -403,7 +406,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.5,
               color: "green",
               fillColor: "green",
-              radius:featureScale(exportVolumeRange, maxCircleRadius)(exportVolume[i][yr])
+              radius: featureScaleLogic(exportVolumeRange, maxCircleRadius)(exportVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -415,7 +418,7 @@ d3.json(wineHistApi).then(function(d){
               fillOpacity: 0.5,
               color: "red",
               fillColor: "red",
-              radius:featureScale(importVolumeRange, maxCircleRadius)(importVolume[i][yr])
+              radius: featureScaleLogic(importVolumeRange, maxCircleRadius)(importVolume[i][yr])
             }).bindPopup(bindPopupTable(yearSlider,i))
           );
         //}
@@ -480,7 +483,7 @@ d3.json(wineHistApi).then(function(d){
     // excess volume as bubble size //kevin
     sizeBubble = [];//kevin
     excessVolBubble.forEach(function(d,i){ //Kevin
-      sizeBubble.push(featureScale(excessVolumeRange, maxBubbleRadius)(d))
+      sizeBubble.push(featureScaleLogic(excessVolumeRange, maxBubbleRadius)(d))
 
     })//kevin
     // if we choose population as bubble color using colorBubble funcation generator, it is hard to distinguish among htem//kevin
@@ -501,7 +504,7 @@ d3.json(wineHistApi).then(function(d){
       mode: 'markers',
       marker: {
             color: colorBubble,  //kevin
-            size:  sizeBubble   //kevin
+            size: sizeBubble   //kevin
       }
     };
     return [traceBubble]
@@ -578,7 +581,7 @@ d3.json(wineHistApi).then(function(d){
     console.log(excessVolumeRange)
     console.log(populationRange)
 
-    console.log(featureScale(populationRange,maxCircleRadius)(populationRange[1]))
+    console.log(featureScaleLogic(populationRange,maxCircleRadius)(populationRange[1]))
   } 
 
 //find the minimum & maximum of each feature through all years of study (1865-2016) among all countries excluding World
@@ -593,7 +596,7 @@ function featureRange(xFeature){
 }
 
 //linearly scaling all feature ranges so that circle radius always fits in [0,maxCircleRadius] for all properties
-function featureScale(featureRange,maxSize) {
+function featureScaleLogic(featureRange,maxSize) {
   let x = d3.scaleLinear()
     .domain(featureRange)
     .range([0, maxSize]);
