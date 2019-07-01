@@ -91,7 +91,7 @@ d3.json(urlFS).then(function(data) {
         .range( [10,50]) // the circle area/size mapping
         .values( makeArr(rangePrice[0],rangePrice[1],4).map(d=>d.toFixed(0))) 
         .width(width+400) // it centers to this
-        .height(height+500) // it centers to this
+        .height(height+700) // it centers to this
         .suffix('') // ability to pass in a suffix e.g. '%'
         .circleColor( '#888') // stroke of the circles
         .textPadding(50) // left padding on text
