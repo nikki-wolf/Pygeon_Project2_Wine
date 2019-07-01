@@ -507,7 +507,23 @@ d3.json(wineHistApi).then(function(d){
             size: sizeBubble   //kevin
       }
     };
-    return [traceBubble]
+
+    var traceText={
+        x:[230,230],
+        y:[220,200],
+        mode: 'text',
+        name: 'Lines and Text',
+        text: ['Circle Radius: Excess Volume per Capita (Liters)', 'Circle Color: Country (Fixed in Time Series)'],
+        textposition: 'bottom',
+        textfont: 
+        {
+          family: 'sans serif',
+          size: 18,
+          color: 'black',
+          type: 'scatter'
+        }
+    }
+    return [traceBubble,traceText]
   }
   
   layoutBubble = {
@@ -519,7 +535,7 @@ d3.json(wineHistApi).then(function(d){
       }},
     showlegend: false,
     height: 600,
-    width: 800,
+    width: 1200,
     xaxis: {
       title: 'Production per Capita (Liters)',
       font: {

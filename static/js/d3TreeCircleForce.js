@@ -28,17 +28,26 @@ var color = ["#b3b3b3", "#66c2a5", "#8da0cb", "#fc8d62" , "#a6d854", "#ffd92f", 
 //add legend for colors using rectangles
 color.forEach(function(d,i){
     svgFS.append("rect")
-    .attr("x", 91+60*i)
+    .attr("x", 150+60*i)
     .attr("y", height-25)
     .attr("width", 10)
     .attr("height",10)
     .style("fill", d);
 })
-let rectTexts=["Avg(Rating):","<83","83-85","85-86","86-87","87-88","88-89","89-90",">90"]
-rectTexts.forEach(function(d,i){
+let rectTexts1=["<83","83-85","85-86","86-87","87-88","88-89","89-90",">90"]
+rectTexts1.forEach(function(d,i){
     svgFS.append("text")
-       .attr("x", 23+60*i)
+       .attr("x", 145+60*i)
        .attr("y", height-28)
+       .text(d)
+       .style("font-size","10")
+})
+
+let rectTexts2=["Avg(Rating):"]
+rectTexts2.forEach(function(d,i){
+    svgFS.append("text")
+       .attr("x",360+60*i)
+       .attr("y", height-48)
        .text(d)
        .style("font-size","10")
 })
